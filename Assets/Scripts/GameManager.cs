@@ -8,15 +8,18 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour
 {
 
-    public int score;
+    int score;
     public static GameManager inst;
 
-    public TextMeshProUGUI  scoreText;
+    [SerializeField] TextMeshProUGUI scoreText;
+
+    [SerializeField] PlayerMovement playerMovement;
 
     public void IncremnentScore ()
     {
         score++;
         scoreText.text = "SCORE: " + score;
+        playerMovement.speed += playerMovement.speedIncreasePerPoint;
     }
 
     private void Awake ()
