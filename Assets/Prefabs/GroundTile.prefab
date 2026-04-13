@@ -431,9 +431,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GroundTile
   coinPrefab: {fileID: 5299546276845930656, guid: 8741b4fa71208294492945635993fb9e, type: 3}
-  obstaclePrebaf: {fileID: 6986578756032161843, guid: 3e8469739b371c3438c18baf56f12cfe, type: 3}
-  tallbstaclePrebaf: {fileID: 6986578756032161843, guid: bb3dbd1c99658fd4a913e5d0cd17aca1, type: 3}
-  tallObstacleChance: 0.2
+  redBarrierPrefab: {fileID: 6044287839736442154, guid: 12b91b6bf98b3184b8f13a573b7e1bb2, type: 3}
+  greenBigDumpsterPrefab: {fileID: 4175658090165041454, guid: a8fc21b6efee5e842909ff1712db388c, type: 3}
+  dumpsterChance: 0.2
+  obstacleHeightOffset: -0.5
 --- !u!1001 &2157077904728925666
 PrefabInstance:
   m_ObjectHideFlags: 0

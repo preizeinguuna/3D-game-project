@@ -1,22 +1,23 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class GroundTile : MonoBehaviour
 {
-
     GroundSpawner groundSpawner;
+
     [SerializeField] GameObject coinPrefab;
-    [SerializeField] GameObject obstaclePrebaf;
-    [SerializeField] GameObject tallbstaclePrebaf;
-    [SerializeField] float tallObstacleChance = 0.2f;
+    [SerializeField] GameObject redBarrierPrefab;
+    [SerializeField] GameObject greenBigDumpsterPrefab;
 
+    [SerializeField] float dumpsterChance = 0.2f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private  void Start()
+    // Pievieno šo, lai var?tu Inspector log? pieregul?t augstumu (piem?ram, -0.5f vai 0.2f)
+    [SerializeField] float obstacleHeightOffset = 0f;
+
+    private void Start()
     {
         groundSpawner = FindFirstObjectByType<GroundSpawner>();
-       
     }
-
 
     private void OnTriggerExit(Collider other)
     {
@@ -24,30 +25,42 @@ public class GroundTile : MonoBehaviour
         Destroy(gameObject, 2);
     }
 
-  
-   public void SpawnObstacle()
+    public void SpawnObstacle()
     {
-        GameObject obstacleToSpawn = obstaclePrebaf;
-        float random = Random.Range(0f, 1f);
-        if (random < tallObstacleChance)
+        // Izmantojam sarakstu, lai š??rš?i nekad nesp?notos viens otram virs?
+        List<int> availableIndices = new List<int> { 2, 3, 4 };
+        int obstaclesToSpawn = Random.Range(1, 3);
+
+        for (int i = 0; i < obstaclesToSpawn; i++)
         {
-            obstacleToSpawn = tallbstaclePrebaf;
+            if (availableIndices.Count == 0) break;
+
+            int listIndex = Random.Range(0, availableIndices.Count);
+            int spawnIndex = availableIndices[listIndex];
+            availableIndices.RemoveAt(listIndex);
+
+            GameObject obstacleToSpawn = (Random.Range(0f, 1f) < dumpsterChance) ? greenBigDumpsterPrefab : redBarrierPrefab;
+
+            if (obstacleToSpawn != null)
+            {
+                Transform spawnPoint = transform.GetChild(spawnIndex);
+
+                // Izveidojam poz?ciju ar manu?lo augstuma korekciju
+                Vector3 spawnPos = spawnPoint.position;
+                spawnPos.y += obstacleHeightOffset;
+
+                Instantiate(obstacleToSpawn, spawnPos, Quaternion.identity, transform);
+            }
         }
-
-        int obsctacleSpawnIndex = Random.Range(2, 5);
-        Transform spawnPoint = transform.GetChild(obsctacleSpawnIndex).transform;
-
-        Instantiate(obstacleToSpawn, spawnPoint.position, Quaternion.identity, transform);
     }
-
-
 
     public void SpawnCoin()
     {
-        int coinToSpawan = 10;
-        for (int i = 0; i < coinToSpawan; i++)
+        // Tavs esošais SpawnCoin kods...
+        int coinsToSpawn = 5;
+        for (int i = 0; i < coinsToSpawn; i++)
         {
-            GameObject temp = Instantiate(coinPrefab,transform);
+            GameObject temp = Instantiate(coinPrefab, transform);
             temp.transform.position = GetRandomPointInCollider(GetComponent<Collider>());
         }
     }
@@ -59,13 +72,7 @@ public class GroundTile : MonoBehaviour
             Random.Range(collider.bounds.min.y, collider.bounds.max.y),
             Random.Range(collider.bounds.min.z, collider.bounds.max.z)
         );
-    if (point != collider.ClosestPoint(point))
-        {
-            point = GetRandomPointInCollider(collider);
-        }
-        point.y =1;
+        point.y = 1f; // Mon?t?m šis augstums ir OK, lai pele t?m var?tu izl?kt cauri
         return point;
-
-    } 
-
+    }
 }
