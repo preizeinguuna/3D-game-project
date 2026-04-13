@@ -3,23 +3,20 @@ using UnityEngine;
 public class Obstacle : MonoBehaviour
 {
     PlayerMovement playerMovement;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
+        // Find the player movement script in the scene
         playerMovement = GameObject.FindFirstObjectByType<PlayerMovement>();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name == "Player")
+        // Check if the object we collided with has the "Player" tag
+        // This will now work for your "Mouse" object
+        if (collision.gameObject.CompareTag("Player"))
         {
             playerMovement.Die();
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
