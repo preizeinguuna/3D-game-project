@@ -5,18 +5,19 @@ public class GroundTile : MonoBehaviour
 {
     GroundSpawner groundSpawner;
 
+    [Header("Prefabs")]
     [SerializeField] GameObject coinPrefab;
     [SerializeField] GameObject redBarrierPrefab;
     [SerializeField] GameObject greenBigDumpsterPrefab;
 
-    [SerializeField] float dumpsterChance = 0.2f;
-
-    // Pievieno šo, lai var?tu Inspector log? pieregul?t augstumu (piem?ram, -0.5f vai 0.2f)
-    [SerializeField] float obstacleHeightOffset = 0f;
+    [Header("Settings")]
+    [SerializeField] float coinHeight = 1.0f;
+    [SerializeField] int coinsToSpawn = 5;
+    [Range(0, 1)][SerializeField] float dumpsterChance = 0.2f;
 
     private void Start()
     {
-        groundSpawner = FindFirstObjectByType<GroundSpawner>();
+        groundSpawner = Object.FindFirstObjectByType<GroundSpawner>();
     }
 
     private void OnTriggerExit(Collider other)
@@ -27,52 +28,41 @@ public class GroundTile : MonoBehaviour
 
     public void SpawnObstacle()
     {
-        // Izmantojam sarakstu, lai š??rš?i nekad nesp?notos viens otram virs?
         List<int> availableIndices = new List<int> { 2, 3, 4 };
         int obstaclesToSpawn = Random.Range(1, 3);
 
         for (int i = 0; i < obstaclesToSpawn; i++)
         {
-            if (availableIndices.Count == 0) break;
-
             int listIndex = Random.Range(0, availableIndices.Count);
             int spawnIndex = availableIndices[listIndex];
             availableIndices.RemoveAt(listIndex);
 
-            GameObject obstacleToSpawn = (Random.Range(0f, 1f) < dumpsterChance) ? greenBigDumpsterPrefab : redBarrierPrefab;
+            GameObject prefab = (Random.Range(0f, 1f) < dumpsterChance) ? greenBigDumpsterPrefab : redBarrierPrefab;
+            Transform spawnPoint = transform.GetChild(spawnIndex);
 
-            if (obstacleToSpawn != null)
-            {
-                Transform spawnPoint = transform.GetChild(spawnIndex);
+            GameObject obstacle = Instantiate(prefab, spawnPoint.position, Quaternion.identity, transform);
 
-                // Izveidojam poz?ciju ar manu?lo augstuma korekciju
-                Vector3 spawnPos = spawnPoint.position;
-                spawnPos.y += obstacleHeightOffset;
-
-                Instantiate(obstacleToSpawn, spawnPos, Quaternion.identity, transform);
-            }
+            Vector3 pos = obstacle.transform.position;
+            pos.y = 0f;
+            obstacle.transform.position = pos;
         }
     }
 
     public void SpawnCoin()
     {
-        // Tavs esošais SpawnCoin kods...
-        int coinsToSpawn = 5;
+        Collider tileCollider = GetComponent<Collider>();
+
+        float minZ = tileCollider.bounds.min.z + 5f;
+        float maxZ = tileCollider.bounds.max.z - 1f;
+
         for (int i = 0; i < coinsToSpawn; i++)
         {
             GameObject temp = Instantiate(coinPrefab, transform);
-            temp.transform.position = GetRandomPointInCollider(GetComponent<Collider>());
-        }
-    }
 
-    Vector3 GetRandomPointInCollider(Collider collider)
-    {
-        Vector3 point = new Vector3(
-            Random.Range(collider.bounds.min.x, collider.bounds.max.x),
-            Random.Range(collider.bounds.min.y, collider.bounds.max.y),
-            Random.Range(collider.bounds.min.z, collider.bounds.max.z)
-        );
-        point.y = 1f; // Mon?t?m šis augstums ir OK, lai pele t?m var?tu izl?kt cauri
-        return point;
+            float randomX = Random.Range(-2.5f, 2.5f);
+            float randomZ = Random.Range(minZ, maxZ);
+
+            temp.transform.position = new Vector3(randomX, coinHeight, randomZ);
+        }
     }
 }

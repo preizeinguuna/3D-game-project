@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5191834660611770712}
   m_Layer: 0
   m_Name: Coin
-  m_TagString: Untagged
+  m_TagString: Coin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -112,7 +112,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5000001
+  m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
@@ -129,6 +129,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Coin
   turnSpeed: 90
+  collectSound: {fileID: 8300000, guid: 5ea2cfc693b009c4e95b83eb064faee7, type: 3}
+  collectVolume: 0.5
 --- !u!54 &5191834660611770712
 Rigidbody:
   m_ObjectHideFlags: 0

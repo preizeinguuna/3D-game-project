@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     int score;
     public static GameManager inst;
+    public static bool gameStarted = false;
 
     [SerializeField] TextMeshProUGUI scoreText;
     [SerializeField] PlayerMovement playerMovement;
@@ -19,10 +20,9 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        // Freeze the game time
         Time.timeScale = 0;
+        gameStarted = false;
 
-        // Hide the score text when the menu is visible
         if (scoreText != null)
         {
             scoreText.gameObject.SetActive(false);
@@ -31,10 +31,9 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        // Resume the game time
         Time.timeScale = 1;
+        gameStarted = true;
 
-        // Show the score text when the game starts
         if (scoreText != null)
         {
             scoreText.gameObject.SetActive(true);
@@ -43,10 +42,18 @@ public class GameManager : MonoBehaviour
         Debug.Log("Game Started and Score shown!");
     }
 
-    public void IncremnentScore()
+    public void IncrementScore()
     {
         score++;
-        scoreText.text = "SCORE: " + score;
-        playerMovement.speed += playerMovement.speedIncreasePerPoint;
+
+        if (scoreText != null)
+        {
+            scoreText.text = "SCORE: " + score;
+        }
+
+        if (playerMovement != null)
+        {
+            playerMovement.speed += playerMovement.speedIncreasePerPoint;
+        }
     }
 }
