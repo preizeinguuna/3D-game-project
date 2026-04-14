@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -75,21 +74,21 @@ public class PlayerMovement : MonoBehaviour
 
         alive = false;
 
-        // ?? Crash sound
         if (effectsSource != null && crashSound != null)
-            effectsSource.PlayOneShot(crashSound, 1f); // nedaudz ska??k
+            effectsSource.PlayOneShot(crashSound, 1f);
 
-        // ?? Stop background music
         if (backgroundMusic != null)
             backgroundMusic.Stop();
 
-        // ?? ?trs restart (lab?kais balanss)
-        Invoke(nameof(Restart), 0.5f);
+        Invoke(nameof(OpenGameOver), 0.5f);
     }
 
-    void Restart()
+    void OpenGameOver()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        if (GameManager.inst != null)
+        {
+            GameManager.inst.ShowGameOver();
+        }
     }
 
     void Jump()
