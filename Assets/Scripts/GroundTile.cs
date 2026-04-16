@@ -22,12 +22,17 @@ public class GroundTile : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        groundSpawner.SpawnTile(true);
-        Destroy(gameObject, 2);
+        // P?rbauda, vai tas, kas izg?ja cauri, ir sp?l?t?js
+        if (other.CompareTag("Player"))
+        {
+            groundSpawner.SpawnTile(true);
+            Destroy(gameObject, 2);
+        }
     }
 
     public void SpawnObstacle()
     {
+        // Š??rš?u punkti parasti ir b?rna objekti (Child) ar indeksiem 2, 3, 4
         List<int> availableIndices = new List<int> { 2, 3, 4 };
         int obstaclesToSpawn = Random.Range(1, 3);
 
@@ -42,6 +47,7 @@ public class GroundTile : MonoBehaviour
 
             GameObject obstacle = Instantiate(prefab, spawnPoint.position, Quaternion.identity, transform);
 
+            // Piespiežam š??rsli b?t tieši uz zemes
             Vector3 pos = obstacle.transform.position;
             pos.y = 0f;
             obstacle.transform.position = pos;
@@ -50,19 +56,40 @@ public class GroundTile : MonoBehaviour
 
     public void SpawnCoin()
     {
-        Collider tileCollider = GetComponent<Collider>();
+        if (coinsToSpawn <= 0) return;
 
-        float minZ = tileCollider.bounds.min.z + 5f;
-        float maxZ = tileCollider.bounds.max.z - 1f;
+        Collider tileCollider = GetComponent<Collider>();
+        // Izvietojam mon?tas ar liel?k?m atstarp?m no mal?m, lai t?s nesaliptu
+        float minZ = tileCollider.bounds.min.z + 3f;
+        float maxZ = tileCollider.bounds.max.z - 3f;
+
+        // Joslas: -2 (kreis?), 0 (vidus), 2 (lab?)
+        float[] lanes = { -2f, 0f, 2f };
+
+        // S?kam nejauš? josl?
+        int currentLaneIndex = Random.Range(0, lanes.Length);
 
         for (int i = 0; i < coinsToSpawn; i++)
         {
             GameObject temp = Instantiate(coinPrefab, transform);
 
-            float randomX = Random.Range(-2.5f, 2.5f);
-            float randomZ = Random.Range(minZ, maxZ);
+            // Vienm?r?gs att?lums starp mon?t?m uz vienas fl?zes
+            float t = (float)i / (coinsToSpawn - 1);
+            float zPos = Mathf.Lerp(minZ, maxZ, t);
 
-            temp.transform.position = new Vector3(randomX, coinHeight, randomZ);
+            // ZIG-ZAG LO?IKA:
+            // Ja esam vid? (index 1), ejam uz s?nu. 
+            // Ja esam s?n?, ejam uz vidu.
+            if (currentLaneIndex == 1)
+            {
+                currentLaneIndex = (Random.Range(0, 2) == 0) ? 0 : 2;
+            }
+            else
+            {
+                currentLaneIndex = 1; // Atgriežamies vid?
+            }
+
+            temp.transform.position = new Vector3(lanes[currentLaneIndex], coinHeight, zPos);
         }
     }
 }

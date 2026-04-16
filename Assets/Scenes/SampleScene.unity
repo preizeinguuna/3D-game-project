@@ -149,6 +149,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   scoreText: {fileID: 932226123}
+  startGameScreen: {fileID: 2105561834}
+  gameOverScreen: {fileID: 664941727}
+  finalScoreText: {fileID: 593045112}
+  highScoreText: {fileID: 888050564}
   playerMovement: {fileID: 128673000}
 --- !u!4 &50208867
 Transform:
@@ -527,15 +531,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8c32b668d3407e43acae076c5d6e828, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovments
-  speed: 10
+  speed: 8
   rb: {fileID: 128672995}
   horizontalMultiplier: 1.7
   jumpForce: 600
   groundMask:
     serializedVersion: 2
     m_Bits: 64
-  speedIncreaseOverTime: 0.05
-  speedIncreasePerPoint: 0.5
+  speedIncreaseOverTime: 0.015
+  speedIncreasePerPoint: 0.2
   effectsSource: {fileID: 0}
   coinSound: {fileID: 0}
   crashSound: {fileID: 0}
@@ -876,7 +880,7 @@ GameObject:
   - component: {fileID: 481609997}
   - component: {fileID: 481609996}
   m_Layer: 5
-  m_Name: Button
+  m_Name: RestartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -945,7 +949,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 481609997}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 50208866}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: RestartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &481609997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -959,7 +975,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.20392157, g: 0.4862745, b: 0.08627451, a: 1}
+  m_Color: {r: 0.5018867, g: 0.4725311, b: 0.4725311, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1275,7 +1291,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &664941728
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1312,7 +1328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.039215688, g: 0.078431375, b: 0.15686275, a: 0.54901963}
+  m_Color: {r: 0.027960101, g: 0.045055144, b: 0.07924521, a: 0.83137256}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2432,7 +2448,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2105561835
 RectTransform:
   m_ObjectHideFlags: 0
