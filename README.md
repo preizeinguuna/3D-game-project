@@ -6,6 +6,12 @@ A lane-based 3D infinite runner game built in Unity, focusing on smooth procedur
 
 ---
 
+### 🕹️ Controls
+* **A / D or Arrow Keys:** Move left / right
+* **Spacebar:** Jump
+
+---
+
 ### 🛠 Technical Specifications
 * **Engine / Version:** Unity 6.0 (or compatible 6x version)
 * **Language / Scripting:** C#
